@@ -242,7 +242,7 @@ class GdbSvdCmd(gdb.Command):
         if register.access in [None, "read-only", "read-write", "read-writeOnce"]:
             addr = peripheral.base_address + register.address_offset
             cmd = self.read_cmd.format(address=addr)
-            pattern = re.compile('(?P<ADDR>\w+):( *?(?P<VALUE>[a-f0-9]+))')
+            pattern = re.compile(r'(?P<ADDR>\w+):( *?(?P<VALUE>[a-f0-9]+))')
 
             try:
                 match = re.search(pattern, gdb.execute(cmd, False, True))
