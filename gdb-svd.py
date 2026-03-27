@@ -20,6 +20,7 @@
 import re
 import gdb
 from terminaltables import AsciiTable
+from cmsis_svd.model import SVDAccessType
 from cmsis_svd.parser import SVDParser
 from textwrap import wrap
 
@@ -239,7 +240,7 @@ class GdbSvdCmd(gdb.Command):
         """ Read register and return an integer
         """
         #access could be not defined for a register
-        if register.access in [None, "read-only", "read-write", "read-writeOnce"]:
+        if register.access in [None, SVDAccessType.READ_ONLY, "read-only", SVDAccessType.READ_WRITE, "read-write", SVDAccessType.READ_WRITE_ONCE, "read-writeOnce"]:
             addr = peripheral.base_address + register.address_offset
             cmd = self.read_cmd.format(address=addr)
             pattern = re.compile('(?P<ADDR>\w+):( *?(?P<VALUE>[a-f0-9]+))')
@@ -257,7 +258,7 @@ class GdbSvdCmd(gdb.Command):
     def write(self, peripheral, register, val):
         """ Write data to memory
         """
-        if register.access in [None, "write-only", "read-write", "writeOnce", "read-writeOnce"]:
+        if register.access in [None, SVDAccessType.WRITE_ONLY, "write-only", SVDAccessType.READ_WRITE, "read-write", SVDAccessType.WRITE_ONCE, "writeOnce", SVDAccessType.READ_WRITE_ONCE, "read-writeOnce"]:
             addr = peripheral.base_address + register.address_offset
             cmd = self.write_cmd.format(address=addr, value=val)
 
